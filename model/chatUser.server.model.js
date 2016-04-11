@@ -23,7 +23,7 @@ m.statics.findMy = function(user_id,cb){
         chatIdArr.push(doc[i]['chat_id']);
       }
       if(chatIdArr){
-        chat.find({'_id':{$in:}},function(err,chatArr){
+        chat.find({'_id':{$in:chatIdArr}},function(err,chatArr){
           if(chatArr){
             for(i in doc){
               for(c in chatArr){
@@ -37,7 +37,7 @@ m.statics.findMy = function(user_id,cb){
         });
       }
     }
-  }).limit(100).sort(number:-1);
+  }).limit(100).sort(-1);
 }
 
 module.exports = mongoose.model('chat_user',m);

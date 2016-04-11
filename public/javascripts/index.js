@@ -111,18 +111,14 @@ geolocation.getCurrentPosition(function(r){
 var mOption = {
     poiRadius : 1000,           //半径为1000米内的POI,默认100米
     numPois : 500                //列举出50个POI,默认10个
-}
+};
 
 
 var map = new BMap.Map("container" , {enableMapClick:false});
 var geolocation = new BMap.Geolocation();
 geolocation.getCurrentPosition(function(r){
-
+  //movestart
   if(this.getStatus() == BMAP_STATUS_SUCCESS){
-/*    var mk = new BMap.Marker(r.point);
-    map.addOverlay(mk);*/
-    //map.panTo(r.point);
-    //console.log(r.point);
     var point = new BMap.Point(r.point.lng,r.point.lat);
     map.centerAndZoom(point,18);   
     map.enableScrollWheelZoom();        //启用滚轮缩放'
@@ -130,7 +126,19 @@ geolocation.getCurrentPosition(function(r){
   }else{
     alert('failed'+this.getStatus());
   }        
-},{enableHighAccuracy: true})
+},{enableHighAccuracy: true});
+
+map.addEventListener("moveend",function(type, target){
+  console.log(type);
+  var res = map.clearOverlays();
+  console.log(res);
+  var point = new BMap.Point(type.currentTarget.ef.lng,type.currentTarget.ef.lat);
+  displayPOI(point);
+  // console.log(target);
+});
+
+
+
 //var mPoint = new BMap.Point(116.404, 39.915);
 //map.centerAndZoom(mPoint, 16);
 
@@ -140,14 +148,14 @@ geolocation.getCurrentPosition(function(r){
 */
 
 function displayPOI(mPoint){
-  console.log(mOption);
+  // console.log(mOption);
 var myGeo = new BMap.Geocoder();        //创建地址解析实例
    // map.addOverlay(new BMap.Circle(mPoint,500));        //添加一个圆形覆盖物
     myGeo.getLocation(mPoint,
         function mCallback(rs){
-          console.log(rs);
+          // console.log(rs);
             var allPois = rs.surroundingPois;       //获取全部POI
-            console.log(allPois);
+            // console.log(allPois);
             for(var i=0;i<allPois.length;++i){
                 addMark(allPois[i]);
             }
@@ -163,21 +171,23 @@ function addMark(allPois){
     var marker = new BMap.Marker(allPois.point);
     var sContent = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+allPois['title']+'</h4>';
     var infoWindow = new BMap.InfoWindow(sContent);
-    marker.addEventListener("click", function(){
+    marker.addEventListener("click", function(type, target){
+         //请求服务器查询节点是否已经注册
+         $.ajax({
+          url:'/chat/info',
+          data:"",
+          type:"POST",
+          dateType:"json",
+          success:function(res){
+            console.log(res);
+          }
+
+         });
          this.openInfoWindow(infoWindow);
-        /* //图片加载完毕重绘infowindow
-         document.getElementById('imgDemo').onload = function (){
-           infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
-         }*/
+         // //图片加载完毕重绘infowindow
+         // document.getElementById('imgDemo').onload = function (){
+         //   infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+         // }
       });
     map.addOverlay(marker); 
 }
-
-
-/*
-    // 百度地图API功能
-  var map = new BMap.Map("container");    // 创建Map实例
-  map.centerAndZoom(new BMap.Point(113.255509, 23.072912), 16);  // 初始化地图,设置中心点坐标和地图级别
-  map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-  map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
-  map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放*/

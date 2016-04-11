@@ -9,17 +9,15 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-
+var session = require('express-session');
 var bodyParser = require('body-parser');
 
-var indexRoute = require('./routes/index.route');
-var userRoute = require('./routes/users.route');
 
 var config = require('./include/config');
 
 var app = express();
 
-var fnc = require(global.includePath+"/common.function")(app);
+require(global.includePath+"/common.function")(app);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -32,20 +30,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("detewterewr25525234"));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*3600 }}))
 // app.use(connect.cookieParser());
 // app.use(connect.session({secret: config.sha1Key, cookie: {maxAge: 60000}}));
 
-//微信 API
-require('./routes/wx.api.route')(app);
 
 //初始
 require('./routes/init.route')(app);
 
-app.use('/', indexRoute);
-app.use('/users', userRoute);
 
-// 点评系统 
-app.use('/comment', require(global.routePath+"/comment.route"));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

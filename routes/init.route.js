@@ -1,9 +1,9 @@
 var config = require(global.includePath+"/config.js");
 
-
+/*
 //判断是否已经有用户 COOKIE ，如果没有的话，就跳到授权页面
 var wx_cookie =  function(req,res,next){
-  req.tkd=config.tkd;
+  
   var call_back = req.path;
   var userCookie = req.cookies.user_wx;
   if(!userCookie){
@@ -33,14 +33,40 @@ var wx_cookie =  function(req,res,next){
   }
 
   next();
-}
+}*/
 
+//从微信 跳过来 WEB 界面 
+var wx_user = function(req,res,next){
+  // var openid = req.query.openid;
+  // console.log(openid);
+  next();
+}
 
 module.exports = function(app){
 
-  app.use([wx_cookie]);
-  app.use(function(req, res, next) {
-    next();
-  });
+//微信 API
+require(global.routePath+'/wx.api.route')(app);
+
+
+//app.use([wx_cookie]);
+// app.use([wx_user]);
+app.use(function(req, res, next) {
+  req.templateData=config.tkd;
+  if(req.headers.host.substring(0,3)=='127'){
+    req.templateData.baseUrl = '/wx';
+  }else{
+    req.templateData.baseUrl = '';
+  }
+  next();
+});
+
+
+
+app.use('/', require(global.routePath+'/index.route'));
+app.use('/users', require(global.routePath+'/users.route'));
+app.use('/chat', require(global.routePath+'/chat.route'));
+
+// 点评系统 
+app.use('/comment', require(global.routePath+"/comment.route"));
 
 }

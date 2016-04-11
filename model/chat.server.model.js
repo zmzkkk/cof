@@ -27,7 +27,6 @@ m.statics.addChat = function(user_id,loc,name,cb){
     cbRes['code'] = -1;
     if((doc.length)<=0){//没找到就可以加入
       //集合名
-      console.log("dddd");
       var db = mongoose.model('chats',m);
       var d = new db();
       d.name=name;

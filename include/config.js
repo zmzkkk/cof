@@ -1,7 +1,7 @@
 var config = {
   mongodb:"mongodb://127.0.0.1/cof",
   tkd:{
-    title:'攻城',
+    title:'朋友圈',
   },
   weixin:{
     appid:'wx7fd21f54ee18184a',
@@ -11,6 +11,6 @@ var config = {
   },
   sha1Key:'fb28376fd9abac6ca1f8eba52094e4a1',  //系统加密 密钥
   //domin:'http://121.42.210.89/wx'           //域名 
-  domin:'http://test.listeneer.com/wx'           //域名 
+  domin:'http://test.listeneer.com'           //域名 
 };
 module.exports = config;

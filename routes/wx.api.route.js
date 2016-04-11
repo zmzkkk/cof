@@ -25,12 +25,14 @@ module.exports = function(app){
   // });
 
   var obj  = wechat.text(function (info, req, res, next) {
-
-    //res.reply({type: "text", content: '系统开发中333'});
-    console.log(info);
     if(info.Content.toLowerCase()=='h' || info.Content.toLowerCase()=='help' ||info.Content.toLowerCase()=='帮助'){
+      var openid = info.FromUserName;
       var commentUrl = req.fnc.url('comment/');
-      res.reply({type: "text", content: '<a href="'+commentUrl+'">点评系统</a>'});
+      commentUrl +='?openid='+openid;
+      var content = '<p><a href="'+commentUrl+'">点评系统</a></p>'+"\n";
+      content +='<p><a href="'+req.fnc.url(''+'?openid='+openid)+'">攻城略地</a></p>';
+
+      res.reply({type: "text", content: content});
     }else{
       res.reply({type: "text", content: '请问有什么可以帮你的，输入help，h，或者帮助可以查看命令'});
     }

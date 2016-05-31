@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("detewterewr25525234"));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'html')));
 
 app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 1000*3600 }}))
 // app.use(connect.cookieParser());

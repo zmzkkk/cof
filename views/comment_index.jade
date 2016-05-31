@@ -1,0 +1,18 @@
+extends layout
+block content
+   div#container
+block footer
+  script(type='text/javascript').
+  script(src='http://api.map.baidu.com/api?v=2.0&ak=CanQQKwsEvyLyTFGZmbMac4P')
+  script(src='http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js')
+  link(rel='stylesheet', href='http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css')
+
+  script(src='http://res.wx.qq.com/open/js/jweixin-1.0.0.js')
+  script().
+    var wx_appid= "#{wxJsConfig.appId}";
+    var wx_timestamp= "#{wxJsConfig.timestamp}";
+    var wx_nonceStr= "#{wxJsConfig.nonceStr}";
+    var wx_signature= "#{wxJsConfig.signature}";
+    var wx_jsApiList= "#{wxJsConfig.jsApiList}";
+    var wx_debug= "#{wxJsConfig.debug}";
+  script(src="/wx/javascripts/weixin.js")
